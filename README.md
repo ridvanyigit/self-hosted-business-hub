@@ -816,3 +816,10 @@ Altyapı çalışır durumdayken, uygulamaları yapılandırma zamanı geldi.
 Bu proje MIT Lisansı altında lisanslanmıştır. Ayrıntılar için [LICENSE](LICENSE) dosyasına bakın.
 
 </details>
+
+<br>
+<br>
+
+<div align="center">
+  <p>Created by <a href="https://www.ridvanyigit.com" target="_blank">Rıdvan Yiğit</a></p>
+</div>
