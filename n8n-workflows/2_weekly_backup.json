@@ -1,0 +1,10 @@
+{
+  "name": "Weekly PostgreSQL Backup to Drive",
+  "nodes": [],
+  "connections": {},
+  "active": false,
+  "settings": {},
+  "id": "WeeklyBackupPlaceholder",
+  "meta": {},
+  "tags": []
+}

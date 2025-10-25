@@ -1,0 +1,164 @@
+{
+  "name": "Formspree Lead Pipeline",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "formspree-webhook",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [0, 0],
+      "id": "9419cda9-37b4-4867-9f79-be9d00cc78c0",
+      "name": "Webhook Trigger"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO contacts (submission_id, name, email, message, phone, form_id, raw_payload)\nVALUES ($1, $2, $3, $4, $5, $6, $7)\nRETURNING *;",
+        "parameters": {
+          "__rl": true,
+          "value": {
+            "parameters": [
+              {
+                "name": "$1",
+                "value": "={{ $json.body.submission_id }}"
+              },
+              {
+                "name": "$2",
+                "value": "={{ $json.body.name }}"
+              },
+              {
+                "name": "$3",
+                "value": "={{ $json.body.email }}"
+              },
+              {
+                "name": "$4",
+                "value": "={{ $json.body.message }}"
+              },
+              {
+                "name": "$5",
+                "value": "={{ $json.body.phone }}"
+              },
+              {
+                "name": "$6",
+                "value": "={{ $json.body.form_id }}"
+              },
+              {
+                "name": "$7",
+                "value": "={{ $json.body | jsonStringify }}"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [200, 0],
+      "id": "745b20fc-3598-467a-846e-12304f9036e4",
+      "name": "Insert to PostgreSQL",
+      "credentials": {
+        "postgres": {
+          "id": "CHANGE_THIS_ID",
+          "name": "PostgreSQL Credentials"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_SPREADSHEET_ID_HERE",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "FormSubmissions"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "submission_id": "={{ $('Insert to PostgreSQL').item.json.submission_id }}",
+            "name": "={{ $('Insert to PostgreSQL').item.json.name }}",
+            "email": "={{ $('Insert to PostgreSQL').item.json.email }}",
+            "received_at": "={{ $('Insert to PostgreSQL').item.json.created_at }}",
+            "message": "={{ $('Insert to PostgreSQL').item.json.message }}"
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [400, 0],
+      "id": "6d6bb453-c12f-409d-9eec-b2fe10eaa5db",
+      "name": "Append to Google Sheet",
+      "credentials": {
+        "googleApi": {
+          "id": "CHANGE_THIS_ID",
+          "name": "Google Service Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "resource": "file",
+        "operation": "upload",
+        "name": "=form_submission_{{$now.toFormat('yyyy-MM-dd_HH-mm-ss')}}.json",
+        "folderId": {
+          "__rl": true,
+          "value": "YOUR_DRIVE_FOLDER_ID_HERE",
+          "mode": "id"
+        },
+        "fileContent": "={{ $('Webhook Trigger').item.json.body | jsonStringify }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [600, 0],
+      "id": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+      "name": "Backup to Google Drive",
+      "credentials": {
+        "googleApi": {
+          "id": "CHANGE_THIS_ID",
+          "name": "Google Service Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "responseCode": 200,
+        "responseBody": "{\"status\":\"ok\"}"
+      },
+      "type": "n8n-nodes-base.httpResponse",
+      "typeVersion": 1,
+      "position": [800, 0],
+      "id": "b2c3d4e5-f6a7-8901-2345-67890abcdef1",
+      "name": "Respond to Webhook"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook Trigger": {
+      "main": [[{ "node": "Insert to PostgreSQL", "type": "main", "index": 0 }]]
+    },
+    "Insert to PostgreSQL": {
+      "main": [[{ "node": "Append to Google Sheet", "type": "main", "index": 0 }]]
+    },
+    "Append to Google Sheet": {
+      "main": [[{ "node": "Backup to Google Drive", "type": "main", "index": 0 }]]
+    },
+    "Backup to Google Drive": {
+      "main": [[{ "node": "Respond to Webhook", "type": "main", "index": 0 }]]
+    }
+  },
+  "active": false,
+  "settings": {},
+  "versionId": "c3d4e5f6-a7b8-9012-3456-7890abcdef12",
+  "id": "AzPKpc3j29PuV7VT",
+  "meta": {},
+  "tags": []
+}
