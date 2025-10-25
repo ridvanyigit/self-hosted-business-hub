@@ -1,6 +1,6 @@
 <div align="center">
-  <h1>Self-Hosted Veri Otomasyon ve Analiz Merkezi</h1>
-  <h3>Cloudflare ile Güvence Altına Alınmış, Uçtan Uca Form Veri Hattı</h3>
+  <h1>Self-Hosted Data Automation & Analytics Hub</h1>
+  <h3>An End-to-End Form Data Pipeline, Secured with Cloudflare</h3>
 </div>
 
 <p align="center">
@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  Bu depo, bir web sitesindeki form gönderiminden başlayarak, verinin işlenmesi, depolanması, yedeklenmesi ve anlık bildirimlerle takibine kadar uzanan; tamamı Docker üzerinde yerel bir makinede çalışan ve Cloudflare Tüneli ile güvence altına alınmış, uçtan uca, güvenli ve sağlam bir veri otomasyonu kurmak için gereken <strong>her şeyi</strong> içeren nihai rehberdir.
+  This repository is the ultimate guide containing <strong>everything</strong> required to set up an end-to-end, secure, and robust data automation pipeline—from website form submission to data processing, storage, backup, and monitoring with instant notifications—all running on a local machine with Docker and secured by Cloudflare Tunnel.
 </p>
 
 ---
