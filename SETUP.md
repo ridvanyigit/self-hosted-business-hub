@@ -1,5 +1,4 @@
 <div align="center">
-  <img src="https://raw.githubusercontent.com/n8n-io/n8n-docs/main/archive/static/images/n8n-logo.png" alt="n8n Logo" width="100"/>
   <h1 style="border-bottom: 2px solid #555; padding-bottom: 10px;">Kurulum Rehberi: Self-Hosted Veri Otomasyon Merkezi</h1>
   <p>Bu rehber, tüm veri toplama ve otomasyon altyapısını Docker Compose ile tek komutta kendi makinenize kurmak için adım adım talimatlar içerir.</p>
 </div>
